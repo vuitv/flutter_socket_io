@@ -149,18 +149,19 @@ class SocketIO {
 
   ///Data listener called by platform API
   _handleData(String eventName, List arguments) {
+    if (arguments.length == 0) {
+      arguments = [null];
+    } else {
+      arguments = arguments.map((_) {
+        try {
+          return jsonDecode(_);
+        } catch (e) {
+          //return _;
+        }
+      }).toList();
+      arguments.removeWhere((value)=> value == null);
+    }
     _listeners[eventName]?.forEach((Function listener) {
-      if (arguments.length == 0) {
-        arguments = [null];
-      } else {
-        arguments = arguments.map((_) {
-          try {
-            return jsonDecode(_);
-          } catch (e) {
-            return _;
-          }
-        }).toList();
-      }
       Function.apply(listener, arguments);
     });
   }
