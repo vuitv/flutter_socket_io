@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'dart:convert' show jsonDecode;
 import 'dart:async';
@@ -156,7 +158,8 @@ class SocketIO {
         try {
           return jsonDecode(_);
         } catch (e) {
-          //return _;
+          if(Platform.isIOS)
+            return _;
         }
       }).toList();
       arguments.removeWhere((value)=> value == null);
